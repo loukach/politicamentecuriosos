@@ -7,8 +7,8 @@ export default function Blog() {
   return (
     <main className="container mx-auto px-4 py-12">
       <div className="mb-10">
-        <h1 className="font-display text-4xl font-bold">Blog & Atualizacoes</h1>
-        <p className="text-muted-foreground mt-2">Ultimas noticias de todos os projetos</p>
+        <h1 className="font-display text-4xl font-bold">Blog & Atualizações</h1>
+        <p className="text-muted-foreground mt-2">Últimas notícias de todos os projetos</p>
       </div>
 
       {posts.length > 0 ? (
@@ -20,7 +20,7 @@ export default function Blog() {
           ))}
         </div>
       ) : (
-        <p className="text-muted-foreground text-center py-20">Ainda nao existem artigos. Volte em breve!</p>
+        <p className="text-muted-foreground text-center py-20">Ainda não existem artigos. Volte em breve!</p>
       )}
     </main>
   );

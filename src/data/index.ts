@@ -2,8 +2,21 @@ import type { Project, Post, PostWithProject } from "./types";
 import projectsData from "./projects.json";
 import postsData from "./posts.json";
 
-const projects: Project[] = projectsData;
-const posts: Post[] = postsData;
+const base = import.meta.env.BASE_URL;
+
+function resolveUrl(url: string | null): string | null {
+  if (!url || url.startsWith("http")) return url;
+  return base + url;
+}
+
+const projects: Project[] = projectsData.map((p) => ({
+  ...p,
+  logo_url: resolveUrl(p.logo_url),
+}));
+const posts: Post[] = postsData.map((p) => ({
+  ...p,
+  cover_image_url: resolveUrl(p.cover_image_url),
+}));
 
 export function getProjects(): Project[] {
   return [...projects].sort(

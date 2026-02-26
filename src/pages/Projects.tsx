@@ -8,7 +8,7 @@ export default function Projects() {
     <main className="container mx-auto px-4 py-12">
       <div className="mb-10">
         <h1 className="font-display text-4xl font-bold">Todos os Projetos</h1>
-        <p className="text-muted-foreground mt-2">Descubra iniciativas de educacao civica com impacto</p>
+        <p className="text-muted-foreground mt-2">Descubra iniciativas de educação cívica com impacto</p>
       </div>
 
       {projects.length > 0 ? (
@@ -20,7 +20,7 @@ export default function Projects() {
           ))}
         </div>
       ) : (
-        <p className="text-muted-foreground text-center py-20">Ainda nao existem projetos. Volte em breve!</p>
+        <p className="text-muted-foreground text-center py-20">Ainda não existem projetos. Volte em breve!</p>
       )}
     </main>
   );

@@ -20,7 +20,7 @@ export default function ProjectDetail() {
 
   if (!project) return (
     <div className="container mx-auto px-4 py-20 text-center">
-      <p className="text-muted-foreground">Projeto nao encontrado.</p>
+      <p className="text-muted-foreground">Projeto não encontrado.</p>
       <Button variant="ghost" asChild className="mt-4"><Link to="/projects"><ArrowLeft className="mr-1 h-4 w-4" /> Voltar</Link></Button>
     </div>
   );
@@ -79,7 +79,7 @@ export default function ProjectDetail() {
       {/* Project Posts */}
       {posts.length > 0 && (
         <section className="mt-12">
-          <h2 className="font-display text-2xl font-bold mb-6">Atualizacoes de {project.name}</h2>
+          <h2 className="font-display text-2xl font-bold mb-6">Atualizações de {project.name}</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {posts.map((post) => (
               <PostCard key={post.id} post={post} />

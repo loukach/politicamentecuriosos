@@ -12,7 +12,7 @@ export default function PostDetail() {
 
   if (!post) return (
     <div className="container mx-auto px-4 py-20 text-center">
-      <p className="text-muted-foreground">Artigo nao encontrado.</p>
+      <p className="text-muted-foreground">Artigo não encontrado.</p>
       <Button variant="ghost" asChild className="mt-4"><Link to="/blog"><ArrowLeft className="mr-1 h-4 w-4" /> Voltar</Link></Button>
     </div>
   );

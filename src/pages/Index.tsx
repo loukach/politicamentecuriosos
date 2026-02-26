@@ -47,23 +47,23 @@ export default function Index() {
           <div className="max-w-3xl">
             <div className="inline-flex items-center gap-2 bg-primary/10 text-primary rounded-full px-4 py-1.5 text-sm font-medium mb-6">
               <Sparkles className="h-4 w-4" />
-              Coletivo de Educacao Civica
+              Coletivo de Educação Cívica
             </div>
             <h1 className="font-display text-4xl md:text-6xl font-bold tracking-tight leading-tight">
-              Capacitar comunidades atraves da{" "}
+              Capacitar comunidades através da{" "}
               <span className="bg-gradient-to-r from-primary via-civic-coral to-accent bg-clip-text text-transparent">
-                educacao civica
+                educação cívica
               </span>
             </h1>
             <p className="text-lg md:text-xl text-muted-foreground mt-6 max-w-2xl">
-              <span className="font-bold text-foreground">#politicamentecuriosos</span> e um coletivo de produtos criados para promover uma democracia saudavel em que os cidadaos acompanham e participam no processo legislativo. Explora o nosso trabalho e mantem-te atualizado.
+              <span className="font-bold text-foreground">#politicamentecuriosos</span> é um coletivo de produtos criados para promover uma democracia saudável em que os cidadãos acompanham e participam no processo legislativo. Explora o nosso trabalho e mantém-te atualizado.
             </p>
             <div className="flex flex-wrap gap-3 mt-8">
               <Button size="lg" asChild className="rounded-full">
                 <Link to="/projects">Explorar Projetos <ArrowRight className="ml-1 h-4 w-4" /></Link>
               </Button>
               <Button size="lg" variant="outline" asChild className="rounded-full">
-                <Link to="/blog">Ler Atualizacoes</Link>
+                <Link to="/blog">Ler Atualizações</Link>
               </Button>
             </div>
           </div>
@@ -75,7 +75,7 @@ export default function Index() {
         <div className="max-w-xl mx-auto text-center">
           <div className="flex items-center justify-center gap-2 mb-3">
             <Mail className="h-5 w-5 text-primary" />
-            <h2 className="font-display text-xl font-bold">Mantem-te informado</h2>
+            <h2 className="font-display text-xl font-bold">Mantém-te informado</h2>
           </div>
           <p className="text-sm text-muted-foreground mb-4">
             Deixa o teu email para receberes novidades sobre os nossos projetos.
@@ -110,7 +110,7 @@ export default function Index() {
           <div className="flex items-end justify-between mb-8">
             <div>
               <h2 className="font-display text-3xl font-bold">Os Nossos Projetos</h2>
-              <p className="text-muted-foreground mt-1">Iniciativas independentes que fazem a diferenca</p>
+              <p className="text-muted-foreground mt-1">Iniciativas independentes que fazem a diferença</p>
             </div>
             <Button variant="ghost" asChild className="hidden sm:flex">
               <Link to="/projects">Ver todos <ArrowRight className="ml-1 h-4 w-4" /></Link>
@@ -132,8 +132,8 @@ export default function Index() {
           <div className="container mx-auto px-4">
             <div className="flex items-end justify-between mb-8">
               <div>
-                <h2 className="font-display text-3xl font-bold">Ultimas Atualizacoes</h2>
-                <p className="text-muted-foreground mt-1">Noticias e historias dos nossos projetos</p>
+                <h2 className="font-display text-3xl font-bold">Últimas Atualizações</h2>
+                <p className="text-muted-foreground mt-1">Notícias e histórias dos nossos projetos</p>
               </div>
               <Button variant="ghost" asChild className="hidden sm:flex">
                 <Link to="/blog">Ver todos <ArrowRight className="ml-1 h-4 w-4" /></Link>
@@ -154,7 +154,7 @@ export default function Index() {
       <footer className="border-t py-10">
         <div className="container mx-auto px-4 text-center text-sm text-muted-foreground">
           <p className="font-display font-semibold text-foreground mb-1">#politicamentecuriosos</p>
-          <p>Um coletivo de projetos independentes de educacao civica.</p>
+          <p>Um coletivo de projetos independentes de educação cívica.</p>
         </div>
       </footer>
     </main>
