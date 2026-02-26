@@ -1,0 +1,166 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 45 30% 97%;
+    --foreground: 220 25% 10%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 220 25% 10%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 220 25% 10%;
+
+    --primary: 262 80% 50%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 168 70% 42%;
+    --secondary-foreground: 0 0% 100%;
+
+    --muted: 220 15% 93%;
+    --muted-foreground: 220 10% 45%;
+
+    --accent: 32 95% 55%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 220 15% 88%;
+    --input: 220 15% 88%;
+    --ring: 262 80% 50%;
+
+    --radius: 0.75rem;
+
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 240 5.3% 26.1%;
+    --sidebar-primary: 262 80% 50%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 240 4.8% 95.9%;
+    --sidebar-accent-foreground: 240 5.9% 10%;
+    --sidebar-border: 220 13% 91%;
+    --sidebar-ring: 262 80% 50%;
+
+    --civic-coral: 4 80% 63%;
+    --civic-teal: 168 70% 42%;
+    --civic-violet: 262 80% 50%;
+    --civic-amber: 32 95% 55%;
+    --civic-sky: 200 85% 55%;
+  }
+
+  .dark {
+    --background: 220 25% 8%;
+    --foreground: 45 20% 95%;
+
+    --card: 220 20% 12%;
+    --card-foreground: 45 20% 95%;
+
+    --popover: 220 20% 12%;
+    --popover-foreground: 45 20% 95%;
+
+    --primary: 262 80% 60%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 168 70% 50%;
+    --secondary-foreground: 0 0% 100%;
+
+    --muted: 220 15% 18%;
+    --muted-foreground: 220 10% 60%;
+
+    --accent: 32 95% 60%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 220 15% 20%;
+    --input: 220 15% 20%;
+    --ring: 262 80% 60%;
+
+    --sidebar-background: 220 25% 10%;
+    --sidebar-foreground: 240 4.8% 95.9%;
+    --sidebar-primary: 262 80% 60%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 240 3.7% 15.9%;
+    --sidebar-accent-foreground: 240 4.8% 95.9%;
+    --sidebar-border: 240 3.7% 15.9%;
+    --sidebar-ring: 262 80% 60%;
+
+    --civic-coral: 4 80% 55%;
+    --civic-teal: 168 70% 50%;
+    --civic-violet: 262 80% 60%;
+    --civic-amber: 32 95% 60%;
+    --civic-sky: 200 85% 60%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground font-body;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Space Grotesk', sans-serif;
+  }
+}
+
+/* Tiptap editor styles */
+.tiptap {
+  @apply outline-none min-h-[200px] p-4;
+}
+
+.tiptap p {
+  @apply mb-3;
+}
+
+.tiptap h1 {
+  @apply text-3xl font-bold mb-4;
+}
+
+.tiptap h2 {
+  @apply text-2xl font-bold mb-3;
+}
+
+.tiptap h3 {
+  @apply text-xl font-bold mb-2;
+}
+
+.tiptap ul {
+  @apply list-disc pl-6 mb-3;
+}
+
+.tiptap ol {
+  @apply list-decimal pl-6 mb-3;
+}
+
+.tiptap blockquote {
+  @apply border-l-4 border-primary pl-4 italic mb-3;
+}
+
+.tiptap img {
+  @apply max-w-full rounded-lg my-4;
+}
+
+.tiptap a {
+  @apply text-primary underline;
+}
+
+.tiptap code {
+  @apply bg-muted px-1.5 py-0.5 rounded text-sm;
+}
+
+.tiptap pre {
+  @apply bg-muted p-4 rounded-lg mb-3 overflow-x-auto;
+}
+
+.tiptap pre code {
+  @apply bg-transparent p-0;
+}
