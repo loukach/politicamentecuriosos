@@ -50,9 +50,9 @@ export default function Index() {
               Coletivo de Educação Cívica
             </div>
             <h1 className="font-display text-4xl md:text-6xl font-bold tracking-tight leading-tight">
-              Capacitar comunidades através da{" "}
+              Cidadãos informados,{" "}
               <span className="bg-gradient-to-r from-primary via-civic-coral to-accent bg-clip-text text-transparent">
-                educação cívica
+                democracia mais forte
               </span>
             </h1>
             <p className="text-lg md:text-xl text-muted-foreground mt-6 max-w-2xl">
