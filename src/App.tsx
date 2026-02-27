@@ -1,4 +1,4 @@
-import { HashRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Navbar from "@/components/Navbar";
 import Index from "./pages/Index";
 import Projects from "./pages/Projects";
@@ -8,7 +8,7 @@ import PostDetail from "./pages/PostDetail";
 import NotFound from "./pages/NotFound";
 
 const App = () => (
-  <HashRouter>
+  <BrowserRouter>
     <Navbar />
     <Routes>
       <Route path="/" element={<Index />} />
@@ -18,7 +18,7 @@ const App = () => (
       <Route path="/blog/:id" element={<PostDetail />} />
       <Route path="*" element={<NotFound />} />
     </Routes>
-  </HashRouter>
+  </BrowserRouter>
 );
 
 export default App;
