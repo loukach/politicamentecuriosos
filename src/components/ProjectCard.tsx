@@ -57,7 +57,7 @@ export default function ProjectCard({ project }: { project: Project }) {
           {project.website_url && (
             <div className="mt-4 flex items-center gap-1 text-xs text-muted-foreground">
               <ExternalLink className="h-3 w-3" />
-              <span className="truncate">{project.website_url.replace(/^https?:\/\//, "")}</span>
+              <span className="truncate">{project.website_url.replace(/^https?:\/\//, "").replace(/\/$/, "")}</span>
             </div>
           )}
         </CardContent>

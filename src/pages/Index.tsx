@@ -155,6 +155,9 @@ export default function Index() {
         <div className="container mx-auto px-4 text-center text-sm text-muted-foreground">
           <p className="font-display font-semibold text-foreground mb-1">#politicamentecuriosos</p>
           <p>Um coletivo de projetos independentes de educação cívica.</p>
+          <a href="https://github.com/loukach/politicamentecuriosos" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 mt-3 hover:text-foreground transition-colors">
+            GitHub
+          </a>
         </div>
       </footer>
     </main>

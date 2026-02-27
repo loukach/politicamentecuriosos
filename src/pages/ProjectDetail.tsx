@@ -1,9 +1,29 @@
 import { useParams, Link } from "react-router-dom";
+import { Fragment } from "react";
 import { getProject, getProjectPosts } from "@/data";
 import PostCard from "@/components/PostCard";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, ExternalLink, Mail, Users } from "lucide-react";
+
+const URL_RE = /(https?:\/\/[^\s]+)/g;
+
+function Linkify({ text }: { text: string }) {
+  const parts = text.split(URL_RE);
+  return (
+    <>
+      {parts.map((part, i) =>
+        URL_RE.test(part) ? (
+          <a key={i} href={part} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">
+            {part}
+          </a>
+        ) : (
+          <Fragment key={i}>{part}</Fragment>
+        )
+      )}
+    </>
+  );
+}
 
 const tagColors = [
   "bg-civic-coral/15 text-civic-coral",
@@ -44,7 +64,11 @@ export default function ProjectDetail() {
             )}
             <div className="flex-1">
               <h1 className="font-display text-3xl md:text-4xl font-bold">{project.name}</h1>
-              {project.description && <p className="text-muted-foreground mt-3 text-lg whitespace-pre-line">{project.description}</p>}
+              {project.description && (
+                <p className="text-muted-foreground mt-3 text-lg whitespace-pre-line">
+                  <Linkify text={project.description} />
+                </p>
+              )}
 
               {project.tags && project.tags.length > 0 && (
                 <div className="flex flex-wrap gap-2 mt-4">
@@ -57,7 +81,7 @@ export default function ProjectDetail() {
               <div className="flex flex-wrap gap-4 mt-6 text-sm text-muted-foreground">
                 {project.website_url && (
                   <a href={project.website_url} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1 hover:text-primary transition-colors">
-                    <ExternalLink className="h-4 w-4" /> Website
+                    <ExternalLink className="h-4 w-4" /> {project.website_url.replace(/^https?:\/\//, "").replace(/\/$/, "")}
                   </a>
                 )}
                 {project.contact_email && (
