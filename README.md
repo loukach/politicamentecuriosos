@@ -1,35 +1,31 @@
 # #politicamentecuriosos
 
-Coletivo de projetos independentes de educacao civica e transparencia parlamentar.
+Coletivo de projetos independentes de educação cívica e transparência parlamentar em Portugal.
 
-## Development
+**https://politicamentecuriosos.onrender.com**
+
+## Conteúdo
+
+O site apresenta projetos de cidadãos que trabalham para tornar a democracia portuguesa mais transparente e acessível: Parla!, Voto Aberto, Política Factual, Debaixo d'olho, e Manual da Juventude.
+
+## Gestão de conteúdo
+
+Todo o conteúdo é estático e editado diretamente nos ficheiros JSON:
+
+- **Projetos** — `src/data/projects.json`
+- **Artigos** — `src/data/posts.json`
+- **Logos** — `public/images/logos/`
+- **Imagens de artigos** — `public/images/posts/`
+
+## Desenvolvimento
 
 ```sh
 npm install
 npm run dev
 ```
 
-## Build & Preview
+## Stack
 
-```sh
-npm run build
-npx vite preview
-```
-
-## Deployment
-
-Deployed automatically to GitHub Pages via GitHub Actions on push to `main`.
-
-## Adding content
-
-- **Projects**: edit `src/data/projects.json`
-- **Posts**: edit `src/data/posts.json`
-- **Images**: add to `public/images/logos/` or `public/images/posts/`
-
-## Tech Stack
-
-- React + TypeScript
-- Vite
-- Tailwind CSS
-- shadcn/ui (badge, button, card, input, skeleton)
-- GitHub Pages (static hosting)
+- React + TypeScript + Vite
+- Tailwind CSS + shadcn/ui
+- Render (static hosting, deploy automático via push para `main`)
