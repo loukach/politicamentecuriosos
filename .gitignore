@@ -12,6 +12,14 @@ dist
 dist-ssr
 *.local
 
+# Env / secrets (never commit real values; .env.example is the tracked template)
+.env
+.env.*
+!.env.example
+
+# Local-only research notes — deliberately kept out of the public repo
+docs/competitive-analysis.md
+
 # Claude Code
 .claude/
 .mcp.json
