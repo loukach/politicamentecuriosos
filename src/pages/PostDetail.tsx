@@ -28,11 +28,9 @@ export default function PostDetail() {
       )}
 
       {post.project && (
-        <Link to={`/projects/${post.project.id}`}>
-          <Badge variant="secondary" className="mb-4 bg-primary/10 text-primary border-0 hover:bg-primary/20 transition-colors">
-            {post.project.name}
-          </Badge>
-        </Link>
+        <Badge variant="secondary" className="mb-4 bg-primary/10 text-primary border-0">
+          {post.project.name}
+        </Badge>
       )}
 
       <h1 className="font-display text-3xl md:text-4xl font-bold">{post.title}</h1>

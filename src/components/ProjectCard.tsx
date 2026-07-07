@@ -1,76 +1,138 @@
-import { Link } from "react-router-dom";
+import { ExternalLink, Github, Gitlab, Mail } from "lucide-react";
+import { usePostHog } from "posthog-js/react";
 import { Card, CardContent } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { ExternalLink } from "lucide-react";
 import type { Project } from "@/data/types";
 
-const tagColors = [
-  "bg-civic-coral/15 text-civic-coral",
-  "bg-civic-teal/15 text-civic-teal",
-  "bg-civic-violet/15 text-civic-violet",
-  "bg-civic-amber/15 text-civic-amber",
-  "bg-civic-sky/15 text-civic-sky",
-];
+const URL_RE = /(https?:\/\/[^\s]+)/;
+
+// Description without URL-bearing lines — a clean blurb for the card body.
+function cardBlurb(desc: string | null): string {
+  if (!desc) return "";
+  return desc
+    .split("\n")
+    .filter((line) => !line.includes("http"))
+    .join("\n")
+    .replace(/\n{3,}/g, "\n\n")
+    .trim();
+}
+
+// Pull "URL — label" entries out of the description so they render as real links.
+// Used for projects that expose several destinations (Política Factual's two
+// Instagram accounts, Voto Aberto's site + API + terminal).
+function extractLinks(desc: string | null): { url: string; label: string }[] {
+  if (!desc) return [];
+  return desc
+    .split("\n")
+    .map((line) => {
+      const m = line.match(URL_RE);
+      if (!m) return null;
+      const url = m[1];
+      const label = line.replace(url, "").replace(/^\s*[—–-]\s*/, "").trim();
+      return { url, label: label || url.replace(/^https?:\/\//, "") };
+    })
+    .filter((x): x is { url: string; label: string } => x !== null);
+}
 
 export default function ProjectCard({ project }: { project: Project }) {
+  const posthog = usePostHog();
+  const blurb = cardBlurb(project.description);
+  const track = (url: string) =>
+    posthog?.capture("project_visit", { project: project.name, url });
+
+  // Every destination the project exposes. Projects that list several links in
+  // their description (Política Factual, Voto Aberto) show them all; the rest
+  // get a single "Visitar site" pointing at website_url.
+  const descLinks = extractLinks(project.description);
+  const siteLinks =
+    descLinks.length > 0
+      ? descLinks
+      : project.website_url
+      ? [{ url: project.website_url, label: "Visitar site" }]
+      : [];
+
+  const RepoIcon = project.repo_url?.includes("gitlab") ? Gitlab : Github;
+
+  const hasFooter =
+    siteLinks.length > 0 || !!project.repo_url || !!project.contact_email;
+
   return (
-    <Link to={`/projects/${project.id}`}>
-      <Card className="group overflow-hidden border-0 shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1 bg-card">
-        {project.screenshot_url ? (
-          <img
-            src={project.screenshot_url}
-            alt={`Página inicial de ${project.name}`}
-            className="w-full h-40 sm:h-56 md:h-64 object-cover object-top"
-          />
-        ) : (
-          <div className="w-full h-40 sm:h-56 md:h-64 bg-gradient-to-br from-primary/20 via-secondary/20 to-accent/20" />
-        )}
-        <div className="h-2 bg-gradient-to-r from-primary via-secondary to-accent" />
-        <CardContent className="p-6">
-          <div className="flex items-start gap-4">
-            {project.logo_url ? (
-              <img
-                src={project.logo_url}
-                alt={`${project.name} logo`}
-                className="w-14 h-14 rounded-xl object-cover shadow-sm flex-shrink-0"
-              />
-            ) : (
-              <div className="w-14 h-14 rounded-xl bg-primary/10 flex items-center justify-center flex-shrink-0">
-                <span className="text-2xl font-bold text-primary font-display">
-                  {project.name.charAt(0)}
-                </span>
-              </div>
+    <Card className="group h-full flex flex-col overflow-hidden border-0 shadow-md hover:shadow-lg transition-shadow duration-300 bg-card">
+      {project.screenshot_url ? (
+        <img
+          src={project.screenshot_url}
+          alt={`Página inicial de ${project.name}`}
+          className="w-full h-40 sm:h-56 md:h-64 object-cover object-top"
+        />
+      ) : (
+        <div className="w-full h-40 sm:h-56 md:h-64 bg-gradient-to-br from-primary/20 via-secondary/20 to-accent/20" />
+      )}
+      <div className="h-2 bg-gradient-to-r from-primary via-secondary to-accent" />
+      <CardContent className="p-6 flex-1 flex flex-col">
+        <div className="flex items-start gap-4">
+          {project.logo_url ? (
+            <img
+              src={project.logo_url}
+              alt={`${project.name} logo`}
+              className="w-14 h-14 rounded-xl object-cover shadow-sm flex-shrink-0"
+            />
+          ) : (
+            <div className="w-14 h-14 rounded-xl bg-primary/10 flex items-center justify-center flex-shrink-0">
+              <span className="text-2xl font-bold text-primary font-display">
+                {project.name.charAt(0)}
+              </span>
+            </div>
+          )}
+          <div className="min-w-0 flex-1">
+            <h3 className="font-display font-bold text-lg">{project.name}</h3>
+            {blurb && (
+              <p className="text-sm text-muted-foreground mt-1 whitespace-pre-line line-clamp-5">
+                {blurb}
+              </p>
             )}
-            <div className="min-w-0 flex-1">
-              <h3 className="font-display font-bold text-lg group-hover:text-primary transition-colors truncate">
-                {project.name}
-              </h3>
-              {project.description && (
-                <p className="text-sm text-muted-foreground mt-1 line-clamp-2">
-                  {project.description}
-                </p>
-              )}
-            </div>
           </div>
+        </div>
 
-          {project.tags && project.tags.length > 0 && (
-            <div className="flex flex-wrap gap-1.5 mt-4">
-              {project.tags.map((tag, i) => (
-                <Badge key={tag} variant="outline" className={`${tagColors[i % tagColors.length]} border-0 text-xs`}>
-                  {tag}
-                </Badge>
-              ))}
-            </div>
-          )}
+        {hasFooter && (
+          <div className="mt-auto pt-4 border-t border-border/50 flex flex-col gap-2">
+            {siteLinks.map((l) => (
+              <a
+                key={l.url}
+                href={l.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={() => track(l.url)}
+                className="flex items-center gap-1.5 text-sm font-medium text-primary hover:underline"
+              >
+                <ExternalLink className="h-4 w-4 flex-shrink-0" />
+                <span className="truncate">{l.label}</span>
+              </a>
+            ))}
 
-          {project.website_url && (
-            <div className="mt-4 flex items-center gap-1 text-xs text-muted-foreground">
-              <ExternalLink className="h-3 w-3" />
-              <span className="truncate">{project.website_url.replace(/^https?:\/\//, "").replace(/\/$/, "")}</span>
-            </div>
-          )}
-        </CardContent>
-      </Card>
-    </Link>
+            {project.repo_url && (
+              <a
+                href={project.repo_url}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={() => track(project.repo_url!)}
+                className="flex items-center gap-1.5 text-xs text-muted-foreground hover:text-primary transition-colors"
+              >
+                <RepoIcon className="h-4 w-4 flex-shrink-0" />
+                <span className="truncate">Código-fonte</span>
+              </a>
+            )}
+
+            {project.contact_email && (
+              <a
+                href={`mailto:${project.contact_email}`}
+                className="flex items-center gap-1.5 text-xs text-muted-foreground hover:text-primary transition-colors"
+              >
+                <Mail className="h-4 w-4 flex-shrink-0" />
+                <span className="truncate">{project.contact_email}</span>
+              </a>
+            )}
+          </div>
+        )}
+      </CardContent>
+    </Card>
   );
 }

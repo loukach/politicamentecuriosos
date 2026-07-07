@@ -5,6 +5,7 @@ export interface Project {
   logo_url: string | null;
   screenshot_url: string | null;
   website_url: string | null;
+  repo_url?: string | null;
   contact_email: string | null;
   tags: string[] | null;
   team_info: string | null;
