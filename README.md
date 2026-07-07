@@ -132,7 +132,9 @@ npm run dev
 
 ## Deploy
 
-O site está alojado no [Render](https://render.com) como static site. O deploy é automático: cada `git push` para `main` dispara um novo build.
+O site está alojado no [Render](https://render.com) como static site. O deploy é automático, mas com uma condição: cada `git push` para `main` corre primeiro a verificação de build no GitHub Actions (`.github/workflows/ci.yml`); só depois dessa verificação passar é que o Render faz o deploy. Costuma demorar menos de 2 minutos do push até ao site atualizado.
+
+Se um push não aparecer no site ao fim de alguns minutos, ver o separador **Actions** no GitHub — se a verificação estiver vermelha, o deploy não avança até isso ser corrigido.
 
 ## Stack
 

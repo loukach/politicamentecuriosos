@@ -4,9 +4,11 @@ Guia para quem vai corrigir bugs ou adicionar funcionalidades neste projeto. Par
 
 ## Visão geral
 
-Site estático, sem backend nem CMS. Todo o conteúdo vive em dois ficheiros JSON (`src/data/projects.json`, `src/data/posts.json`), lidos em build-time pelo Vite. Não há testes automatizados nem CI configurado neste repositório — a única verificação antes de um `git push` é correr `npm run dev` e olhar para o browser.
+Site estático, sem backend nem CMS próprios. Todo o conteúdo vive em dois ficheiros JSON (`src/data/projects.json`, `src/data/posts.json`), lidos em build-time pelo Vite. Não há testes automatizados — o único check em CI é um build (ver secção "Deploy & CI" abaixo). A principal verificação antes de um `git push` continua a ser correr `npm run dev` e olhar para o browser.
 
-**Stack:** React 18 + TypeScript + Vite, React Router v6 (`BrowserRouter`), Tailwind CSS + shadcn/ui (Radix primitives), `date-fns` para datas. Alojado no Render como static site, deploy automático em cada push para `main`.
+**Exceção:** o formulário de subscrição por email (`handleSubscribe` em `src/pages/Index.tsx`) chama uma API externa — `POST https://parla-estudio-api.onrender.com/api/politicamentecuriosos/subscribe` — que vive noutro repositório (`parla-estudio`, `api/app.py`), não neste. Essa rota envia um email via Resend para lucas@parla-app.eu a cada subscrição; não guarda nada em base de dados. Se o formulário parar de funcionar, o bug provavelmente está no outro repositório ou na configuração `CORS_ORIGINS`/`RESEND_API_KEY` desse serviço no Render, não aqui.
+
+**Stack:** React 18 + TypeScript + Vite, React Router v6 (`BrowserRouter`), Tailwind CSS + shadcn/ui (Radix primitives), `date-fns` para datas, `posthog-js` para analytics. Alojado no Render como static site.
 
 ## Estrutura de ficheiros
 
@@ -36,9 +38,22 @@ public/images/
   logos/               # logo quadrado de cada projeto
   screenshots/          # captura de ecrã da homepage de cada projeto
   posts/                 # imagens de capa dos artigos
+.github/workflows/
+  ci.yml                 # build check (npm ci && npm run build) em push/PR para main
 ```
 
 Sem ficheiros de rotas dinâmicas nem API routes — tudo é client-side routing sobre dados estáticos importados no bundle.
+
+## Deploy & CI
+
+O Render está configurado com `autoDeployTrigger: checksPass` (não `commit`) — só faz deploy automático de um commit depois de um status check do GitHub (o "CI" definido em `.github/workflows/ci.yml`) passar nesse commit. Isto é diferente da maioria dos outros serviços Render da conta, que fazem deploy assim que há um commit novo, sem gate.
+
+**Gotcha histórico:** entre 27 de fevereiro e 12 de junho de 2026 (e depois, entre 12 de junho e 7 de julho), nada foi automaticamente publicado, apesar de vários commits em `main` — porque não existia nenhum check de GitHub configurado, e sem check, a condição `checksPass` nunca é satisfeita. O site ficou semanas a mostrar uma versão desatualizada sem que isso fosse óbvio a partir do repositório (o `git log` local/remoto parecia normal; só comparando com o dashboard do Render, via `list_deploys`/`get_deploy`, é que ficou visível o commit realmente em produção). O ficheiro `.github/workflows/ci.yml` foi adicionado precisamente para dar ao `checksPass` algo para verificar.
+
+**Se o site parecer desatualizado depois de um push:**
+1. Confirmar que o workflow `CI` passou para esse commit: `gh run list --branch main --limit 5` (ou o separador Actions no GitHub)
+2. Se o CI passou mas o Render não avançou, confirmar qual o commit realmente em produção (dashboard do Render → Events, ou via Render MCP `list_deploys`/`get_deploy` no serviço `politicamentecuriosos`) e comparar com `git log origin/main`
+3. Testar o site com um parâmetro anti-cache (`?cachebust=1`) antes de assumir que o deploy falhou — o CDN do Render por vezes serve uma versão em cache por breves minutos mesmo depois do deploy ficar "live"
 
 ## Camada de dados (`src/data/index.ts`)
 
@@ -62,7 +77,8 @@ Sem ficheiros de rotas dinâmicas nem API routes — tudo é client-side routing
 
 - **"O projeto X está na posição errada"** → não é a ordem no JSON. Ver `featured` e `created_at` desse projeto e comparar com os outros (`getProjects()` em `src/data/index.ts`).
 - **Imagem partida num cartão** → confirmar que o ficheiro existe mesmo em `public/images/{logos,screenshots,posts}/` com o nome exato referido no JSON (maiúsculas/minúsculas incluídas), e que o campo não tem `/` inicial.
-- **Antes de dar push, correr sempre `npm run dev` e verificar visualmente** — não há CI nem testes automatizados que apanhem um erro de build ou um campo em falta.
+- **Antes de dar push, correr sempre `npm run dev` e verificar visualmente.** O CI (`.github/workflows/ci.yml`) só corre `npm run build` — apanha erros de TypeScript/import, mas não um campo em falta num JSON ou um valor errado, já que não há testes automatizados.
+- **Site não atualiza depois do push?** Ver a secção "Deploy & CI" acima — provavelmente é o gate `checksPass` do Render, não um bug no código.
 - O `vite` sobe automaticamente a porta se `5173` estiver ocupada (por outro projeto a correr na máquina) — confirmar sempre o URL real no output do terminal.
 
 ### Evolutiva (novas funcionalidades)

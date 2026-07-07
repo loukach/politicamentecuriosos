@@ -7,7 +7,8 @@ import ProjectCard from "@/components/ProjectCard";
 import PostCard from "@/components/PostCard";
 import { getProjects, getPublishedPosts } from "@/data";
 
-const FORMSPREE_URL = "https://formspree.io/f/YOUR_FORM_ID";
+const SUBSCRIBE_API_URL = "https://parla-estudio-api.onrender.com/api/politicamentecuriosos/subscribe";
+const SHOW_BLOG_SECTION = false;
 
 export default function Index() {
   const projects = getProjects();
@@ -23,7 +24,7 @@ export default function Index() {
     setSubmitting(true);
     setError("");
     try {
-      const res = await fetch(FORMSPREE_URL, {
+      const res = await fetch(SUBSCRIBE_API_URL, {
         method: "POST",
         headers: { "Content-Type": "application/json", Accept: "application/json" },
         body: JSON.stringify({ email }),
@@ -127,7 +128,7 @@ export default function Index() {
       )}
 
       {/* Latest Posts */}
-      {posts.length > 0 && (
+      {SHOW_BLOG_SECTION && posts.length > 0 && (
         <section className="bg-muted/50 py-16">
           <div className="container mx-auto px-4">
             <div className="flex items-end justify-between mb-8">
