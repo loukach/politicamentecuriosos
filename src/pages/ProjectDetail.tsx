@@ -51,6 +51,10 @@ export default function ProjectDetail() {
         <Link to="/projects"><ArrowLeft className="mr-1 h-4 w-4" /> Todos os Projetos</Link>
       </Button>
 
+      {project.screenshot_url && (
+        <img src={project.screenshot_url} alt={`Página inicial de ${project.name}`} className="w-full h-64 md:h-80 object-cover object-top rounded-2xl mb-8" />
+      )}
+
       <div className="bg-card rounded-2xl shadow-lg overflow-hidden">
         <div className="h-3 bg-gradient-to-r from-primary via-secondary to-accent" />
         <div className="p-8 md:p-12">

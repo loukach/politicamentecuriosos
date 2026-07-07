@@ -16,6 +16,15 @@ export default function ProjectCard({ project }: { project: Project }) {
   return (
     <Link to={`/projects/${project.id}`}>
       <Card className="group overflow-hidden border-0 shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1 bg-card">
+        {project.screenshot_url ? (
+          <img
+            src={project.screenshot_url}
+            alt={`Página inicial de ${project.name}`}
+            className="w-full h-40 sm:h-56 md:h-64 object-cover object-top"
+          />
+        ) : (
+          <div className="w-full h-40 sm:h-56 md:h-64 bg-gradient-to-br from-primary/20 via-secondary/20 to-accent/20" />
+        )}
         <div className="h-2 bg-gradient-to-r from-primary via-secondary to-accent" />
         <CardContent className="p-6">
           <div className="flex items-start gap-4">

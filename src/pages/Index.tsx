@@ -47,7 +47,7 @@ export default function Index() {
           <div className="max-w-3xl">
             <div className="inline-flex items-center gap-2 bg-primary/10 text-primary rounded-full px-4 py-1.5 text-sm font-medium mb-6">
               <Sparkles className="h-4 w-4" />
-              Coletivo de Educação Cívica
+              Plataforma de Educação Cívica
             </div>
             <h1 className="font-display text-4xl md:text-6xl font-bold tracking-tight leading-tight">
               Cidadãos informados,{" "}
@@ -56,7 +56,7 @@ export default function Index() {
               </span>
             </h1>
             <p className="text-lg md:text-xl text-muted-foreground mt-6 max-w-2xl">
-              <span className="font-bold text-foreground">#politicamentecuriosos</span> é um coletivo de produtos criados para promover uma democracia saudável em que os cidadãos acompanham e participam no processo legislativo. Explora o nosso trabalho e mantém-te atualizado.
+              <span className="font-bold text-foreground">#politicamentecuriosos</span> é uma plataforma dedicada a divulgar iniciativas independentes que promovem uma democracia saudável, ajudando os cidadãos a acompanhar e participar no processo legislativo. Explora estas iniciativas e mantém-te atualizado.
             </p>
             <div className="flex flex-wrap gap-3 mt-8">
               <Button size="lg" asChild className="rounded-full">
@@ -78,7 +78,7 @@ export default function Index() {
             <h2 className="font-display text-xl font-bold">Mantém-te informado</h2>
           </div>
           <p className="text-sm text-muted-foreground mb-4">
-            Deixa o teu email para receberes novidades sobre os nossos projetos.
+            Deixa o teu email para receberes novidades sobre as iniciativas que acompanhamos.
           </p>
           {subscribed ? (
             <div className="flex items-center justify-center gap-2 text-primary font-medium py-3">
@@ -109,7 +109,7 @@ export default function Index() {
         <section className="container mx-auto px-4 py-16">
           <div className="flex items-end justify-between mb-8">
             <div>
-              <h2 className="font-display text-3xl font-bold">Os Nossos Projetos</h2>
+              <h2 className="font-display text-3xl font-bold">Iniciativas em Destaque</h2>
               <p className="text-muted-foreground mt-1">Iniciativas independentes que fazem a diferença</p>
             </div>
             <Button variant="ghost" asChild className="hidden sm:flex">
@@ -133,7 +133,7 @@ export default function Index() {
             <div className="flex items-end justify-between mb-8">
               <div>
                 <h2 className="font-display text-3xl font-bold">Últimas Atualizações</h2>
-                <p className="text-muted-foreground mt-1">Notícias e histórias dos nossos projetos</p>
+                <p className="text-muted-foreground mt-1">Notícias e histórias das iniciativas que acompanhamos</p>
               </div>
               <Button variant="ghost" asChild className="hidden sm:flex">
                 <Link to="/blog">Ver todos <ArrowRight className="ml-1 h-4 w-4" /></Link>
@@ -154,7 +154,7 @@ export default function Index() {
       <footer className="border-t py-10">
         <div className="container mx-auto px-4 text-center text-sm text-muted-foreground">
           <p className="font-display font-semibold text-foreground mb-1">#politicamentecuriosos</p>
-          <p>Um coletivo de projetos independentes de educação cívica.</p>
+          <p>Uma plataforma dedicada a projetos independentes de educação cívica.</p>
           <a href="https://github.com/loukach/politicamentecuriosos" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 mt-3 hover:text-foreground transition-colors">
             GitHub
           </a>

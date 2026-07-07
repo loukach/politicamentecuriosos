@@ -3,10 +3,12 @@ export interface Project {
   name: string;
   description: string | null;
   logo_url: string | null;
+  screenshot_url: string | null;
   website_url: string | null;
   contact_email: string | null;
   tags: string[] | null;
   team_info: string | null;
+  featured: boolean;
   created_at: string;
   updated_at: string;
 }

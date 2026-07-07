@@ -1,12 +1,14 @@
 # #politicamentecuriosos
 
-Coletivo de projetos independentes de educação cívica e transparência parlamentar em Portugal.
+Plataforma dedicada a projetos independentes de educação cívica e transparência parlamentar em Portugal.
 
 **https://politicamentecuriosos.onrender.com**
 
+> Este README cobre a gestão de conteúdo (editar projetos/artigos, sem tocar em código). Para arquitetura, camada de dados e tarefas de manutenção técnica, ver [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md).
+
 ## Conteúdo
 
-O site apresenta projetos de cidadãos que trabalham para tornar a democracia portuguesa mais transparente e acessível: Parla!, Voto Aberto, Política Factual, Debaixo d'olho, e Manual da Juventude.
+O site apresenta projetos de cidadãos que trabalham para tornar a democracia portuguesa mais transparente e acessível: Parla!, Estúdio Parla!, Voto Aberto, Política Factual, Debaixo d'olho, Manual da Juventude, DRE Tretas, Democrac_IA, Assemble.ia, Votações AR, Parlamento PT, e quemvotou.pt.
 
 ## Gestão de conteúdo
 
@@ -19,6 +21,7 @@ Todo o conteúdo é estático e editado diretamente nos ficheiros JSON. Após ca
 | Projetos | `src/data/projects.json` |
 | Artigos | `src/data/posts.json` |
 | Logos de projetos | `public/images/logos/` |
+| Screenshots de projetos | `public/images/screenshots/` |
 | Imagens de artigos | `public/images/posts/` |
 
 ---
@@ -33,10 +36,12 @@ Editar `src/data/projects.json`. Cada projeto tem esta estrutura:
   "name": "Nome do Projeto",
   "description": "Descrição do projeto.\n\nURLs no texto são convertidos automaticamente em links clicáveis:\nhttps://exemplo.pt — descrição do link",
   "logo_url": "images/logos/nome-do-logo.png",
+  "screenshot_url": "images/screenshots/nome-do-projeto.png",
   "website_url": "https://exemplo.pt",
   "contact_email": "email@exemplo.pt",
   "team_info": "Nome da pessoa ou equipa",
   "tags": ["tag1", "tag2"],
+  "featured": false,
   "created_at": "2026-01-01T00:00:00+00:00",
   "updated_at": "2026-01-01T00:00:00+00:00"
 }
@@ -46,10 +51,11 @@ Editar `src/data/projects.json`. Cada projeto tem esta estrutura:
 - **`id`** — UUID único. Gerar um em https://www.uuidgenerator.net/
 - **`description`** — Texto simples. Usar `\n` para quebras de linha. URLs (começando por `http`) são automaticamente convertidos em links clicáveis na página de detalhe
 - **`logo_url`** — Caminho relativo (sem `/` no início). Colocar a imagem PNG em `public/images/logos/`
+- **`screenshot_url`** — Caminho relativo para uma captura de ecrã da página inicial do projeto, mostrada como banner no card e na página de detalhe. Colocar a imagem em `public/images/screenshots/`. Pode ser `null` (o card mostra um fundo em gradiente em vez de imagem)
 - **`website_url`** — URL principal do projeto, mostrado no card. Pode ser `null`
 - **`contact_email`**, **`team_info`** — Opcionais, podem ser `null`
 - **`tags`** — Array de strings, ou `[]` se não houver tags
-- A ordem dos projetos no JSON define a ordem de apresentação no site (do primeiro ao último)
+- **`featured`** — `true` coloca o projeto no topo da lista, à frente de todos os projetos não destacados. Dentro do mesmo grupo (destacados ou não), a ordem é por `created_at` decrescente — **não** pela posição no ficheiro JSON
 
 ---
 
@@ -113,6 +119,7 @@ O campo `content` aceita HTML. Tags suportadas:
 ### Imagens
 
 - **Logos de projetos** — Colocar em `public/images/logos/`. Formato PNG recomendado
+- **Screenshots de projetos** — Colocar em `public/images/screenshots/`. Captura de ecrã da página inicial do projeto, idealmente num viewport de desktop (ex: 1280×800), formato PNG
 - **Imagens de artigos** — Colocar em `public/images/posts/`. Qualquer formato web (PNG, JPG, WebP)
 - Manter nomes de ficheiro em minúsculas, sem espaços (usar hífens: `nome-da-imagem.png`)
 

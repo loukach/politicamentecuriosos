@@ -12,6 +12,7 @@ function resolveUrl(url: string | null): string | null {
 const projects: Project[] = projectsData.map((p) => ({
   ...p,
   logo_url: resolveUrl(p.logo_url),
+  screenshot_url: resolveUrl(p.screenshot_url),
 }));
 const posts: Post[] = postsData.map((p) => ({
   ...p,
@@ -19,9 +20,10 @@ const posts: Post[] = postsData.map((p) => ({
 }));
 
 export function getProjects(): Project[] {
-  return [...projects].sort(
-    (a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
-  );
+  return [...projects].sort((a, b) => {
+    if (a.featured !== b.featured) return a.featured ? -1 : 1;
+    return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
+  });
 }
 
 export function getProject(id: string): Project | undefined {
