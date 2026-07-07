@@ -7,7 +7,7 @@ import ProjectCard from "@/components/ProjectCard";
 import PostCard from "@/components/PostCard";
 import { getProjects, getPublishedPosts } from "@/data";
 
-const SUBSCRIBE_API_URL = "https://parla-estudio-api.onrender.com/api/politicamentecuriosos/subscribe";
+const SUBSCRIBE_API_URL = "https://viriato-api.onrender.com/api/politicamentecuriosos/subscribe";
 const SHOW_BLOG_SECTION = false;
 
 export default function Index() {
