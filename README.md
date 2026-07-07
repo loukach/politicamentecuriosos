@@ -38,6 +38,7 @@ Editar `src/data/projects.json`. Cada projeto tem esta estrutura:
   "logo_url": "images/logos/nome-do-logo.png",
   "screenshot_url": "images/screenshots/nome-do-projeto.png",
   "website_url": "https://exemplo.pt",
+  "repo_url": "https://github.com/org/repo",
   "contact_email": "email@exemplo.pt",
   "team_info": "Nome da pessoa ou equipa",
   "tags": ["tag1", "tag2"],
@@ -49,12 +50,14 @@ Editar `src/data/projects.json`. Cada projeto tem esta estrutura:
 
 **Notas:**
 - **`id`** — UUID único. Gerar um em https://www.uuidgenerator.net/
-- **`description`** — Texto simples. Usar `\n` para quebras de linha. URLs (começando por `http`) são automaticamente convertidos em links clicáveis na página de detalhe
+- **`description`** — Texto simples. Usar `\n` para quebras de linha. As linhas no formato `URL — descrição` são extraídas e mostradas como links clicáveis no fundo do card (ex: Política Factual, Voto Aberto); o resto da descrição fica como corpo do card. Um projeto com links na descrição mostra-os todos (não é o card inteiro que linka)
 - **`logo_url`** — Caminho relativo (sem `/` no início). Colocar a imagem PNG em `public/images/logos/`
-- **`screenshot_url`** — Caminho relativo para uma captura de ecrã da página inicial do projeto, mostrada como banner no card e na página de detalhe. Colocar a imagem em `public/images/screenshots/`. Pode ser `null` (o card mostra um fundo em gradiente em vez de imagem)
-- **`website_url`** — URL principal do projeto, mostrado no card. Pode ser `null`
-- **`contact_email`**, **`team_info`** — Opcionais, podem ser `null`
-- **`tags`** — Array de strings, ou `[]` se não houver tags
+- **`screenshot_url`** — Caminho relativo para uma captura de ecrã da página inicial do projeto, mostrada como banner no topo do card. Colocar a imagem em `public/images/screenshots/`. Pode ser `null` (o card mostra um fundo em gradiente em vez de imagem)
+- **`website_url`** — URL principal do projeto, mostrado como link "Visitar site" no rodapé do card (abre em novo separador). Pode ser `null` (se a descrição tiver links próprios, são esses que aparecem)
+- **`repo_url`** — Opcional. URL do repositório de código (GitHub, GitLab, etc.). Quando presente, mostra um link "Código-fonte" no card. Omitir ou `null` se o projeto não tiver repo público
+- **`contact_email`** — Opcional, pode ser `null`. Mostrado no rodapé do card como link `mailto:` clicável
+- **`team_info`** — Opcional, pode ser `null`. **Já não é mostrado na UI** (mantido nos dados para referência)
+- **`tags`** — Array de strings, ou `[]` se não houver tags. **Nota:** as tags já não são mostradas na UI (mantidas nos dados para uso futuro)
 - **`featured`** — `true` coloca o projeto no topo da lista, à frente de todos os projetos não destacados. Dentro do mesmo grupo (destacados ou não), a ordem é por `created_at` decrescente — **não** pela posição no ficheiro JSON
 
 ---

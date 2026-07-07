@@ -21,18 +21,17 @@ src/
     projects.json    # conteúdo dos projetos (fonte de verdade)
     posts.json       # conteúdo dos artigos do blog
   pages/
-    Index.tsx         # homepage: hero, captura de email, grelha de projetos em destaque, últimas atualizações
-    Projects.tsx       # /projects — grelha completa
-    ProjectDetail.tsx   # /projects/:id
-    Blog.tsx             # /blog — grelha completa
-    PostDetail.tsx        # /blog/:id
+    Index.tsx         # homepage — é o produto inteiro: hero + grelha de projetos + captura de email
+    Blog.tsx             # /blog — grelha completa (escondida da UI; SHOW_BLOG_SECTION=false)
+    PostDetail.tsx        # /blog/:id (não linkado a partir de lado nenhum na UI atual)
     NotFound.tsx           # rota "*"
   components/
     Navbar.tsx
-    ProjectCard.tsx
+    ProjectCard.tsx      # cartão que linka diretamente para o site externo do projeto
+    Footer.tsx           # rodapé global (renderizado em App.tsx, fora das <Routes>)
     PostCard.tsx
     ui/                # primitivas shadcn (Badge, Button, Card, Input, Skeleton)
-  App.tsx              # define as rotas (react-router)
+  App.tsx              # define as rotas (react-router) + ScrollToTop + Navbar/Footer globais
   lib/utils.ts          # cn() — helper clsx + tailwind-merge
 public/images/
   logos/               # logo quadrado de cada projeto
@@ -43,6 +42,8 @@ public/images/
 ```
 
 Sem ficheiros de rotas dinâmicas nem API routes — tudo é client-side routing sobre dados estáticos importados no bundle.
+
+**Não existe página de detalhe de projeto nem listagem `/projects`.** A grelha na homepage (`Index.tsx`) é o diretório completo, e cada `ProjectCard` linka diretamente para o site externo do projeto (`website_url`, `target="_blank"`). O modelo anterior (`Projects.tsx` + `ProjectDetail.tsx` em `/projects/:id`) foi removido: com ~12 projetos, cada um com uma frase de descrição e um link, uma página intermédia por projeto era cerimónia a mais e um beco sem saída. Toda a informação por projeto (descrição, autoria, links) cabe no cartão.
 
 ## Deploy & CI
 
@@ -60,15 +61,18 @@ O Render está configurado com `autoDeployTrigger: checksPass` (não `commit`) �
 - `resolveUrl(url)` — se `url` for `null` ou já começar por `http`, devolve tal e qual; caso contrário, prefixa com `import.meta.env.BASE_URL`. Aplica-se a qualquer campo de imagem (`logo_url`, `screenshot_url`, `cover_image_url`). Ao adicionar um novo campo de imagem a `Project`/`Post`, tem de se mapear aqui também, senão o caminho relativo não resolve.
 - **`getProjects()` ordena por `featured` (true primeiro) e depois por `created_at` decrescente dentro de cada grupo — não pela ordem no ficheiro JSON.** Isto já causou confusão: o `README.md` chegou a documentar (incorretamente) que a ordem no ficheiro é que manda. Se um projeto aparece na posição errada, é sempre por causa de `featured`/`created_at`, nunca por reordenar o array.
 - `getPublishedPosts()` filtra `published: true` e ordena por `published_at` (ou `created_at` se `published_at` for `null`) decrescente.
-- `getProject(id)` / `getPost(id)` — lookup direto por `id`, sem ordenação.
-- `getProjectPosts(projectId)` — posts publicados associados a um projeto, para a secção "Atualizações de X" na página de detalhe.
+- `getProject(id)` / `getPost(id)` — lookup direto por `id`, sem ordenação. `getProject` e `getProjectPosts` já não são usados na UI (ficaram da era das páginas de detalhe); mantidos como exports inofensivos, tree-shaken do bundle.
 
 ## Padrões de UI a reutilizar
 
 - **Cartões** (`ProjectCard.tsx`, `PostCard.tsx`) seguem sempre a mesma receita: `Card` com `overflow-hidden`, imagem de topo (`object-cover object-top`, com um `div` de gradiente como *fallback* quando a imagem é `null`), barra de gradiente de 2px (`from-primary via-secondary to-accent`), depois o conteúdo em `CardContent`.
-- **Páginas de detalhe** (`ProjectDetail.tsx`, `PostDetail.tsx`) repetem o padrão: banner `w-full h-64 md:h-80 object-cover object-top rounded-2xl mb-8`, omitido por completo (sem *fallback*) quando não há imagem — diferente do comportamento nos cartões, que mostram sempre um gradiente. É intencional: no cartão a altura tem de ser consistente na grelha; na página de detalhe, não há grelha a manter alinhada.
-- **`Linkify`** (definido dentro de `ProjectDetail.tsx`) converte URLs em texto simples (campo `description`) em links clicáveis — usado porque as descrições no JSON usam `\n` e URLs em vez de HTML.
-- **`tagColors`** — array de 5 classes de cor, repetido *tal e qual* em `ProjectCard.tsx` e `ProjectDetail.tsx` (não está partilhado num só sítio). Se mudar a paleta, tem de se editar os dois ficheiros.
+- **`ProjectCard` é o cartão-diretório. O cartão em si *não* é clicável** — em vez de um `<a>` a envolver tudo (que não podia conter os `<a>` aninhados dos vários links), tem um rodapé com uma lista de links explícitos, todos reais e clicáveis, cada um a registar um evento PostHog `project_visit` no `onClick`. Ordem do rodapé:
+  1. **Destino(s)** — se a descrição tem uma lista de links (`extractLinks()`: Política Factual → 2 Instagram; Voto Aberto → site + API + terminal), mostra-os todos com o respetivo label; caso contrário, um único link "Visitar site" para `website_url`. A cor é `text-primary` (destaque).
+  2. **`repo_url`** — link "Código-fonte" com ícone `Github` ou `Gitlab` (escolhido pelo host do URL), se o campo existir.
+  3. **`contact_email`** — `mailto:` com ícone `Mail`, se existir.
+  Os itens 2–3 são `text-muted-foreground` (secundários). Todo o bloco é fixado ao fundo com `mt-auto` para alinhar os rodapés na grelha. **`team_info` não é mostrado** — o campo mantém-se nos dados, mas o "por {autor}" foi removido da UI (a atribuição/contacto já vem pelo `contact_email` quando existe).
+- **`cardBlurb()`** (em `ProjectCard.tsx`) remove da descrição as linhas que contêm URLs, para o corpo do cartão ficar limpo (prosa apenas) — os links dessas linhas reaparecem no rodapé via `extractLinks()`.
+- **Os cartões já não mostram `tags`** (removidas por serem ruído visual — o campo continua nos dados).
 - **`post.content` é injetado com `dangerouslySetInnerHTML`** em `PostDetail.tsx`. Só é seguro porque o conteúdo é sempre escrito à mão por um maintainer no `posts.json`, nunca vindo de um formulário público. Não ligar isto a nenhuma fonte não confiável sem sanitizar primeiro.
 
 ## Tarefas comuns
@@ -88,15 +92,33 @@ O Render está configurado com `autoDeployTrigger: checksPass` (não `commit`) �
 2. Se for um campo de imagem/URL: `src/data/index.ts` — adicionar `resolveUrl()` no mapeamento
 3. `src/data/projects.json` / `posts.json` — preencher o campo em todas as entradas existentes (TypeScript não vai queixar-se de campos em falta num ficheiro `.json`, só nos sítios em que o tipo é usado — testar sempre visualmente)
 4. Atualizar o exemplo de schema e as notas em `README.md`
-5. Se o campo deve aparecer na UI: editar `ProjectCard.tsx`/`ProjectDetail.tsx` (ou os equivalentes de `Post`)
+5. Se o campo deve aparecer na UI: editar `ProjectCard.tsx` (ou o equivalente de `Post`)
 
 **Adicionar uma página nova:**
 1. Criar `src/pages/NovaPage.tsx`
 2. Registar a rota em `App.tsx`
-3. Se for uma secção de navegação principal, adicionar o link em `Navbar.tsx` (desktop e o bloco do menu mobile — são dois blocos JSX separados, não um só)
+3. Se for uma secção de navegação principal, adicionar o link em `Navbar.tsx` (atualmente a navbar só tem o logótipo — não há links)
 
 **Adicionar um tipo de conteúdo novo (além de projetos/artigos):**
-Replicar o padrão existente: interface em `types.ts`, ficheiro `.json` próprio, getters em `data/index.ts`, componente de cartão + página de listagem + página de detalhe, seguindo a estrutura de `Project`/`ProjectCard`/`Projects`/`ProjectDetail`.
+Replicar o padrão existente: interface em `types.ts`, ficheiro `.json` próprio, getters em `data/index.ts`, e um componente de cartão, seguindo a estrutura de `Project`/`ProjectCard`.
+
+## Layout / app shell (a causa-raiz de vários "bugs de layout")
+
+`App.tsx` envolve tudo numa **shell de altura total com rodapé fixo ao fundo** — o padrão flexbox standard:
+
+```tsx
+<div className="min-h-screen flex flex-col">
+  <Navbar />
+  <div className="flex-1">   {/* cresce para empurrar o rodapé para baixo */}
+    <Routes>…</Routes>
+  </div>
+  <Footer />
+</div>
+```
+
+`min-h-screen` (= `min-height: 100vh`) garante que a página ocupa sempre o ecrã inteiro; `flex-1` na zona de conteúdo empurra o `Footer` para o fundo mesmo em páginas curtas. **Sem isto, páginas com pouco conteúdo ficavam mais curtas que a viewport e o rodapé "flutuava" a meio do ecrã** — foi a causa real de vários relatos recorrentes ("não se ajusta à janela", "o scroll não chega ao fundo", "a página de detalhe não renderiza bem"). Se aparecer outro sintoma destes, o problema está quase de certeza aqui (a shell), não numa página específica.
+
+**Landmine removida:** o `src/App.css` do template Vite (com `#root { max-width: 1280px; margin: 0 auto; padding: 2rem; text-align: center }`) foi **apagado**. Não estava a ser importado (só `index.css` é), mas o instante em que alguém o importasse partia o layout todo. Não recriar. O `#root` não deve ter `max-width` nem `padding` — a largura é controlada pelos `container mx-auto px-4` dentro de cada secção.
 
 ## Gotchas específicos deste projeto
 
