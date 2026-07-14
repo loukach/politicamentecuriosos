@@ -169,5 +169,19 @@
     "featured": false,
     "created_at": "2026-07-07T14:20:00+00:00",
     "updated_at": "2026-07-07T14:20:00+00:00"
+  },
+  {
+    "id": "af535e51-74a9-4b8c-a344-2f5ecb59afa9",
+    "name": "Leiclara",
+    "description": "Agente de IA especializado em lei de imigração portuguesa. Tem acesso direto às leis de imigração principais do Diário da República e aos documentos processuais da página oficial da AIMA.\n\nComparada com o ChatGPT e outros modelos generalistas, a Leiclara produz respostas mais rigorosas, incluindo referências das fontes oficiais mais relevantes.",
+    "logo_url": null,
+    "screenshot_url": "images/screenshots/leiclara.png",
+    "website_url": "https://leiclara.com",
+    "contact_email": "ola@leiclara.com",
+    "team_info": null,
+    "tags": ["imigração", "inteligência artificial", "legislação", "AIMA"],
+    "featured": false,
+    "created_at": "2026-07-14T17:00:00+00:00",
+    "updated_at": "2026-07-14T17:00:00+00:00"
   }
 ]
